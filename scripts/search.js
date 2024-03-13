@@ -22,13 +22,18 @@ document.getElementById('byQueryBtn').addEventListener('click', async function()
     let query = queryInput.value.trim();
 
     const selectedResource = resourceSelect.value;
-    let result;
-    if (selectedResource === 'people') {
-        result = await starWars.searchCharacters(query);
-    } else if (selectedResource === 'planets') {
-        result = await starWars.searchPlanets(query);
-    } else if (selectedResource === 'species') {
-        result = await starWars.searchSpecies(query);
+    try {
+        let result;
+    switch (selectedResource) {
+        case 'people':
+            result = await starWars.searchCharacters(query);
+            break;
+        case 'planets':
+            result = await starWars.searchPlanets(query);
+            break;
+        case 'species':
+            result = await starWars.searchSpecies(query);
+            break;
     }
     contentBlock.innerHTML = '';
     if (result.results && result.results.length > 0) {
@@ -49,6 +54,10 @@ document.getElementById('byQueryBtn').addEventListener('click', async function()
         nameSearch.textContent = query;
         
     }
+    } catch(er) {
+        console.log('search error: ', err)
+    }
+    
     spin.style.visibility = 'hidden';
     resultBlock.style.visibility = 'visible';
 });
@@ -60,19 +69,22 @@ document.getElementById('byQueryBtnId').addEventListener('click', async function
     let id = queryInputId.value.trim();
 
     const selectedResource = resourceSelectId.value;
-    let result;
-        if (selectedResource === 'people') {
+    try{
+        let result;
+    switch (selectedResource) {
+        case 'people':
             result = await starWars.getCharactersById(id);
-        }
-        if (selectedResource === 'planets') {
+            break;
+        case 'planets':
             result = await starWars.getPlanetsById(id);
-        } 
-        if (selectedResource === 'species') {
+            break;
+        case 'species':
             result = await starWars.getSpeciesById(id);
-        } 
-        if (selectedResource === 'films') {
+            break;
+        case 'films':
             result = await starWars.getFilmsById(id);
-        }
+            break;
+    }
     contentBlock.innerHTML = '';
      if (result.detail !== "Not found" && id !== '') {
         const characterHTML = createCharacterHTML(result);
@@ -90,6 +102,10 @@ document.getElementById('byQueryBtnId').addEventListener('click', async function
         contentBlock.innerHTML = '<p>enter ID</p>';
         nameSearch.textContent = '';
     }
+    } catch {
+        console.log('ID error: ', err)
+    }
+    
     resultBlock.style.visibility = 'visible';
     spin.style.visibility = 'hidden';
 })
