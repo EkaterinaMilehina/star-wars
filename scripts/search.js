@@ -8,23 +8,14 @@
 
 const queryInput = document.querySelector('.input');
 const queryInputId = document.querySelector('.inputId');
-
-const queryBtn = document.getElementById('byQueryBtn');
-const queryBtnId = document.getElementById('byQueryBtnId');
-const deleteBtn = document.querySelector('.delete');
-
 const resultBlock = document.getElementById('result-container');
 const nameSearch = document.querySelector('p');
 const contentBlock = document.getElementById('content');
 const spin = document.querySelector('.spinner');
-
-const searchBlock = document.getElementById('byQueryBlock');
-const searchBlockId = document.getElementById('byQueryBlockId');
-
 const resourceSelect = document.querySelector('.selectSearch');
 const resourceSelectId = document.querySelector('.selectId');
 
-queryBtn.addEventListener('click', async function() {
+document.getElementById('byQueryBtn').addEventListener('click', async function() {
     queryInputId.value = '';
     resultBlock.style.visibility = 'hidden';
     spin.style.visibility = 'visible';
@@ -40,7 +31,6 @@ queryBtn.addEventListener('click', async function() {
         result = await starWars.searchSpecies(query);
     }
     contentBlock.innerHTML = '';
-
     if (result.results && result.results.length > 0) {
         result.results.forEach(character => {
             const characterHTML = createCharacterHTML(character);
@@ -54,17 +44,16 @@ queryBtn.addEventListener('click', async function() {
             contentBlock.innerHTML = contentBlock.innerHTML.replace(homeworldURL, planetName);
         }
         nameSearch.textContent = result.results[0].name;
-    
     } else {
-        contentBlock.innerHTML = '<p>there is no such.</p>';
+        contentBlock.innerHTML = '<p>there is no such</p>';
         nameSearch.textContent = query;
+        
     }
-    
     spin.style.visibility = 'hidden';
     resultBlock.style.visibility = 'visible';
 });
 
-queryBtnId.addEventListener('click', async function() {
+document.getElementById('byQueryBtnId').addEventListener('click', async function() {
     queryInput.value = '';
     resultBlock.style.visibility = 'hidden';
     spin.style.visibility = 'visible';
@@ -72,20 +61,20 @@ queryBtnId.addEventListener('click', async function() {
 
     const selectedResource = resourceSelectId.value;
     let result;
-    if (selectedResource === 'people') {
-        result = await starWars.getCharactersById(id);
-    }
-    if (selectedResource === 'planets') {
-        result = await starWars.getPlanetsById(id);
-    } 
-    if (selectedResource === 'species') {
-        result = await starWars.getSpeciesById(id);
-    } 
-    if (selectedResource === 'films') {
-        result = await starWars.getFilmsById(id);
-    }
+        if (selectedResource === 'people') {
+            result = await starWars.getCharactersById(id);
+        }
+        if (selectedResource === 'planets') {
+            result = await starWars.getPlanetsById(id);
+        } 
+        if (selectedResource === 'species') {
+            result = await starWars.getSpeciesById(id);
+        } 
+        if (selectedResource === 'films') {
+            result = await starWars.getFilmsById(id);
+        }
     contentBlock.innerHTML = '';
-    if (result.detail !== "Not found" && id !== '') {
+     if (result.detail !== "Not found" && id !== '') {
         const characterHTML = createCharacterHTML(result);
         contentBlock.innerHTML = characterHTML;
         
@@ -98,11 +87,11 @@ queryBtnId.addEventListener('click', async function() {
         }
         nameSearch.textContent = result.name;
     } else {
-        contentBlock.innerHTML = '<p>there is no such.</p>';
-        nameSearch.textContent = id;
+        contentBlock.innerHTML = '<p>enter ID</p>';
+        nameSearch.textContent = '';
     }
-    spin.style.visibility = 'hidden';
     resultBlock.style.visibility = 'visible';
+    spin.style.visibility = 'hidden';
 })
 
 function createCharacterHTML(character) {
@@ -118,8 +107,22 @@ function createCharacterHTML(character) {
         .join('');
 }
 
-deleteBtn.addEventListener('click', function() {
+document.querySelector('.delete').addEventListener('click', function() {
     resultBlock.style.visibility = 'hidden';
     queryInput.value = '';
     queryInputId.value = '';
+});
+
+queryInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); 
+        document.getElementById('byQueryBtn').click();
+    }
+});
+
+queryInputId.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); 
+        document.getElementById('byQueryBtnId').click();
+    }
 });
